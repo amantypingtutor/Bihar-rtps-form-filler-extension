@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "RTPS Bihar Profile Autofill",
+  "version": "3.1",
+  "description": "RTPS Bihar form autofill (profile save/capture) + Image aur PDF ko target KB size me compress/resize karne wala tool.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "*://serviceonline.bihar.gov.in/*",
+    "*://rtps.bihar.gov.in/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "RTPS Profile Autofill"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://serviceonline.bihar.gov.in/*",
+        "*://rtps.bihar.gov.in/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}
