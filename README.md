@@ -201,7 +201,7 @@ Bonus में एक offline **Image & PDF Compressor** भी है जो �
 ```
 
 ### 🦁 Aman Kumar
-**CEO & Founder — [Aman Typing Tutor](https://amantypingtutor.com)**
+**CEO & Founder — [Aman Typing Tutor](https://aman-typing-tutor.vercel.app)**
 
 
  🔥
