@@ -13,36 +13,41 @@
     padding: 28px 16px;
     color: #1a1a2e;
   }
-  .container { max-width: 640px; margin: 0 auto; }
+  .container { max-width: 900px; margin: 0 auto; }
+  .container.wide { max-width: 900px; }
 
-  .hero { text-align: center; margin-bottom: 30px; }
+  .hero { text-align: center; margin-bottom: 26px; }
   .hero h1 { font-size: 26px; margin-bottom: 6px; }
   .hero p { color: #666; font-size: 14px; line-height: 1.6; }
   .credit { font-size: 12.5px; color: #999; margin-top: 6px; }
 
-  .card {
+  .download-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  .download-box {
+    flex: 1 1 300px;
     background: white;
     border-radius: 14px;
-    padding: 22px;
-    margin-bottom: 18px;
+    padding: 20px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
-  .card h2 { font-size: 18px; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
-  .card p { color: #555; font-size: 13.5px; line-height: 1.6; margin-bottom: 16px; }
-  .card ul { color: #555; font-size: 13.5px; line-height: 1.8; margin: 0 0 16px; padding-left: 20px; }
+  .download-box h2 { font-size: 16px; margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+  .download-box p { color: #555; font-size: 13px; line-height: 1.55; margin-bottom: 14px; }
 
   .btn {
     display: inline-block;
-    padding: 12px 22px;
+    padding: 11px 20px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
-    font-size: 14.5px;
+    font-size: 14px;
     text-align: center;
+    width: 100%;
   }
-  .btn-primary { background: #16a34a; color: white; }
-  .btn-primary:hover { background: #128a3e; }
   .btn-secondary { background: #2563eb; color: white; }
   .btn-secondary:hover { background: #1d4ed8; }
 
@@ -50,18 +55,40 @@
     display: inline-block;
     background: #f0fdf4;
     color: #16a34a;
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 600;
     padding: 3px 9px;
     border-radius: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+  }
+
+  .tool-section-title {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .tool-section-title h2 { font-size: 19px; margin-bottom: 4px; }
+  .tool-section-title p { color: #666; font-size: 13px; }
+
+  .tool-frame-wrap {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  #compressorFrame {
+    width: 100%;
+    border: none;
+    display: block;
+    min-height: 900px;
   }
 
   footer {
     text-align: center;
     font-size: 12px;
     color: #999;
-    margin-top: 24px;
+    margin-top: 10px;
     line-height: 1.6;
   }
   footer a { color: #2563eb; text-decoration: none; }
@@ -72,37 +99,33 @@
 
   <div class="hero">
     <h1>⚡ RTPS Bihar Autofill</h1>
-    <p>RTPS Bihar (serviceonline.bihar.gov.in) form fill karna aasan banane ke liye banaya gaya toolkit — ek Chrome extension aur ek offline browser-based Compressor/Document tool.</p>
+    <p>RTPS Bihar (serviceonline.bihar.gov.in) form fill karna aasan banane ke liye banaya gaya toolkit.</p>
     <div class="credit">Built by Aman Kumar — CEO &amp; Founder, Aman Typing Tutor</div>
   </div>
 
-  <div class="card">
-    <span class="badge">💻 Desktop Chrome / Edge</span>
-    <h2>⚡ RTPS Autofill Extension — Laptop/PC</h2>
-    <p>Form ek baar bharo, profile save karo, agli baar ek click mein pura form (dropdown samet) wapas bhar jayega. Desktop Chrome/Edge mein <code>chrome://extensions</code> → Developer mode → <strong>"Load unpacked"</strong> se install hota hai.</p>
-    <a class="btn btn-secondary" href="rtps-autofill.zip" download>⬇️ Extension ZIP Download Karo (.zip)</a>
+  <div class="download-row">
+    <div class="download-box">
+      <span class="badge">💻 Desktop Chrome / Edge</span>
+      <h2>⚡ Extension — Laptop/PC</h2>
+      <p>Form ek baar bharo, profile save karo, ek click mein wapas bhar jayega. <code>chrome://extensions</code> → Developer mode → <strong>"Load unpacked"</strong> se install karo.</p>
+      <a class="btn btn-secondary" href="rtps-autofill.zip" download>⬇️ ZIP Download Karo (.zip)</a>
+    </div>
+
+    <div class="download-box">
+      <span class="badge">📱 Android — Edge Canary</span>
+      <h2>⚡ Extension — Phone</h2>
+      <p><strong>Microsoft Edge Canary</strong> app install karo (Play Store) → Settings → About → version 5 baar tap → Developer Options → <strong>"Extension install by crx"</strong>.</p>
+      <a class="btn btn-secondary" href="rtps-autofill.crx" download>⬇️ CRX Download Karo (.crx)</a>
+    </div>
   </div>
 
-  <div class="card">
-    <span class="badge">📱 Android — Edge Canary</span>
-    <h2>⚡ RTPS Autofill Extension — Phone</h2>
-    <p>Mobile Chrome extensions support nahi karta, isliye phone par <strong>Microsoft Edge Canary</strong> app chahiye (Play Store se install karo). Fir Edge Canary mein Settings → About → version 5 baar tap karo (Developer Options unlock) → Developer Options → <strong>"Extension install by crx"</strong> → ye file select karo.</p>
-    <a class="btn btn-secondary" href="rtps-autofill.crx" download>⬇️ Extension CRX Download Karo (.crx)</a>
-  </div>
-
-  <div class="card">
-    <span class="badge">🌐 Works on any phone/laptop browser</span>
+  <div class="tool-section-title">
     <h2>🗜️ Compressor &amp; Document Tools</h2>
-    <p>Bina kuch install kiye seedha browser mein khulta hai — Image/PDF compress karo, Front+Back document ek A4 page par banao, Image ko PDF mein convert karo, multiple PDFs merge karo, ya multiple images ko ek mein jodo. Sab kuch offline, tumhare device ke andar hi process hota hai — koi file kahi upload nahi hoti.</p>
-    <ul>
-      <li>📷 Image Compressor (target KB size)</li>
-      <li>📄 PDF Compressor (target KB size)</li>
-      <li>🪪 Front + Back Document Creator (crop + A4 layout)</li>
-      <li>🖼️➡️📄 Image → PDF Converter</li>
-      <li>📑 Merge PDF</li>
-      <li>🧩 Image Merger</li>
-    </ul>
-    <a class="btn btn-primary" href="compressor.html">Compressor Tool Kholo →</a>
+    <p>Neeche seedha use karo — Image/PDF Compress, Front+Back Document, Image→PDF, Merge PDF, Image Merger. Sab offline, koi upload nahi.</p>
+  </div>
+
+  <div class="tool-frame-wrap">
+    <iframe id="compressorFrame" src="compressor.html" title="Compressor Tool"></iframe>
   </div>
 
   <footer>
@@ -111,5 +134,35 @@
   </footer>
 
 </div>
+
+<script>
+  // Auto-resize the embedded compressor tool's iframe so the whole tool is
+  // visible on the page without an inner scrollbar, and keeps resizing as
+  // panels/results inside it show or hide content.
+  (function () {
+    var iframe = document.getElementById('compressorFrame');
+
+    function resize() {
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        var h = doc.documentElement.scrollHeight;
+        iframe.style.height = Math.max(h, 600) + 'px';
+      } catch (e) {
+        // Cross-origin fallback (shouldn't happen on same GitHub Pages site)
+      }
+    }
+
+    iframe.addEventListener('load', function () {
+      resize();
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        var observer = new MutationObserver(resize);
+        observer.observe(doc.body, { childList: true, subtree: true, attributes: true });
+      } catch (e) {}
+      window.addEventListener('resize', resize);
+      setInterval(resize, 800); // safety net for changes MutationObserver might miss
+    });
+  })();
+</script>
 </body>
 </html>
