@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTPS Bihar Autofill — Tools</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, Segoe UI, Arial, sans-serif;
+    background: linear-gradient(135deg, #f4f5f7 0%, #eef2ff 100%);
+    margin: 0;
+    padding: 28px 16px;
+    color: #1a1a2e;
+  }
+  .container { max-width: 640px; margin: 0 auto; }
+
+  .hero { text-align: center; margin-bottom: 30px; }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero p { color: #666; font-size: 14px; line-height: 1.6; }
+  .credit { font-size: 12.5px; color: #999; margin-top: 6px; }
+
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card h2 { font-size: 18px; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+  .card p { color: #555; font-size: 13.5px; line-height: 1.6; margin-bottom: 16px; }
+  .card ul { color: #555; font-size: 13.5px; line-height: 1.8; margin: 0 0 16px; padding-left: 20px; }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14.5px;
+    text-align: center;
+  }
+  .btn-primary { background: #16a34a; color: white; }
+  .btn-primary:hover { background: #128a3e; }
+  .btn-secondary { background: #2563eb; color: white; }
+  .btn-secondary:hover { background: #1d4ed8; }
+
+  .badge {
+    display: inline-block;
+    background: #f0fdf4;
+    color: #16a34a;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    margin-top: 24px;
+    line-height: 1.6;
+  }
+  footer a { color: #2563eb; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <h1>⚡ RTPS Bihar Autofill</h1>
+    <p>RTPS Bihar (serviceonline.bihar.gov.in) form fill karna aasan banane ke liye banaya gaya toolkit — ek Chrome extension aur ek offline browser-based Compressor/Document tool.</p>
+    <div class="credit">Built by Aman Kumar — CEO &amp; Founder, Aman Typing Tutor</div>
+  </div>
+
+  <div class="card">
+    <span class="badge">💻 Desktop Chrome / Edge</span>
+    <h2>⚡ RTPS Autofill Extension — Laptop/PC</h2>
+    <p>Form ek baar bharo, profile save karo, agli baar ek click mein pura form (dropdown samet) wapas bhar jayega. Desktop Chrome/Edge mein <code>chrome://extensions</code> → Developer mode → <strong>"Load unpacked"</strong> se install hota hai.</p>
+    <a class="btn btn-secondary" href="rtps-autofill.zip" download>⬇️ Extension ZIP Download Karo (.zip)</a>
+  </div>
+
+  <div class="card">
+    <span class="badge">📱 Android — Edge Canary</span>
+    <h2>⚡ RTPS Autofill Extension — Phone</h2>
+    <p>Mobile Chrome extensions support nahi karta, isliye phone par <strong>Microsoft Edge Canary</strong> app chahiye (Play Store se install karo). Fir Edge Canary mein Settings → About → version 5 baar tap karo (Developer Options unlock) → Developer Options → <strong>"Extension install by crx"</strong> → ye file select karo.</p>
+    <a class="btn btn-secondary" href="rtps-autofill.crx" download>⬇️ Extension CRX Download Karo (.crx)</a>
+  </div>
+
+  <div class="card">
+    <span class="badge">🌐 Works on any phone/laptop browser</span>
+    <h2>🗜️ Compressor &amp; Document Tools</h2>
+    <p>Bina kuch install kiye seedha browser mein khulta hai — Image/PDF compress karo, Front+Back document ek A4 page par banao, Image ko PDF mein convert karo, multiple PDFs merge karo, ya multiple images ko ek mein jodo. Sab kuch offline, tumhare device ke andar hi process hota hai — koi file kahi upload nahi hoti.</p>
+    <ul>
+      <li>📷 Image Compressor (target KB size)</li>
+      <li>📄 PDF Compressor (target KB size)</li>
+      <li>🪪 Front + Back Document Creator (crop + A4 layout)</li>
+      <li>🖼️➡️📄 Image → PDF Converter</li>
+      <li>📑 Merge PDF</li>
+      <li>🧩 Image Merger</li>
+    </ul>
+    <a class="btn btn-primary" href="compressor.html">Compressor Tool Kholo →</a>
+  </div>
+
+  <footer>
+    Independent, unofficial tool — Government of Bihar / RTPS portal se koi sambandh nahi.<br>
+    <a href="README.md">README padhne ke liye yaha click karo</a>
+  </footer>
+
+</div>
+</body>
+</html>
