@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Compressor Tool — RTPS Autofill</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, Segoe UI, Arial, sans-serif;
+    background: #f4f5f7;
+    margin: 0;
+    padding: 24px;
+    color: #1a1a2e;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab-btn {
+    flex: 1 1 30%;
+    padding: 9px 4px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    background: #16a34a;
+    color: white;
+    border-color: #16a34a;
+  }
+
+  .panel {
+    display: none;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+  }
+  .panel.active { display: block; }
+
+  .drop-zone {
+    border: 2px dashed #bbb;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    color: #777;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .drop-zone.dragover { border-color: #16a34a; background: #f0fdf4; }
+  .drop-zone input { display: none; }
+
+  .file-info {
+    display: none;
+    background: #f7f8fa;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+
+  .row { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+  .row label { font-size: 13px; color: #444; min-width: 150px; }
+  .row input[type="number"] {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .unit { font-size: 13px; color: #666; }
+
+  button.action {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  button.action:hover { background: #1d4ed8; }
+  button.action:disabled { background: #93a3b8; cursor: not-allowed; }
+
+  .progress-wrap {
+    display: none;
+    margin-top: 16px;
+  }
+  .progress-bar-bg {
+    background: #e5e7eb;
+    border-radius: 6px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    background: #16a34a;
+    height: 100%;
+    width: 0%;
+    transition: width 0.2s;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: #555;
+    margin-top: 6px;
+  }
+
+  .result-box {
+    display: none;
+    margin-top: 18px;
+    padding: 16px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+  }
+  .result-box.error {
+    background: #fef2f2;
+    border-color: #fecaca;
+  }
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .download-btn {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 8px;
+    padding: 10px 18px;
+    background: #16a34a;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .download-btn.secondary {
+    background: white;
+    color: #444;
+    border: 1px solid #ccc;
+  }
+  .preview-img {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+  }
+  .note {
+    font-size: 12px;
+    color: #888;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+
+  /* --- Shared multi-tool styles --- */
+  .side-block {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+  .side-block h3 {
+    font-size: 14px;
+    margin: 0 0 10px;
+    color: #333;
+  }
+  .mini-drop {
+    border: 2px dashed #bbb;
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+  .mini-drop.dragover { border-color: #16a34a; background: #f0fdf4; }
+  .mini-drop input { display: none; }
+
+  .crop-wrap {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    margin-top: 8px;
+  }
+  .crop-wrap canvas { display: block; max-width: 100%; border-radius: 6px; border: 1px solid #ddd; }
+  .crop-overlay { position: absolute; top: 0; left: 0; touch-action: none; cursor: crosshair; }
+
+  .crop-controls { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .crop-controls button {
+    width: auto;
+    flex: 1;
+    min-width: 90px;
+    padding: 7px 8px;
+    font-size: 12px;
+    margin-top: 0;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #444;
+  }
+  .crop-controls button.primary { background: #2563eb; color: white; border-color: #2563eb; }
+
+  .file-list-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: #f7f8fa;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+  }
+  .file-list-item .fname { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-list-item button {
+    width: auto;
+    padding: 4px 8px;
+    font-size: 11px;
+    margin-top: 0;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .format-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .format-row button {
+    width: auto;
+    flex: 1;
+    min-width: 90px;
+    margin-top: 0;
+  }
+
+  select.tool-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🗜️ Image &amp; PDF Compressor</h1>
+  <div class="subtitle">Target KB size do — quality kharab kiye bina file size adjust ho jayega. Sab kuch offline, tumhare browser ke andar hi.</div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="image">📷 Image</button>
+    <button class="tab-btn" data-tab="pdf">📄 PDF</button>
+    <button class="tab-btn" data-tab="doc">🪪 Front+Back</button>
+    <button class="tab-btn" data-tab="img2pdf">🖼️➡️📄 Img→PDF</button>
+    <button class="tab-btn" data-tab="mergepdf">📑 Merge PDF</button>
+    <button class="tab-btn" data-tab="imgmerge">🧩 Img Merge</button>
+  </div>
+
+  <!-- IMAGE PANEL -->
+  <div class="panel active" id="panel-image">
+    <div class="drop-zone" id="imageDrop">
+      <div>📁 Image yaha drag karo ya click karke select karo</div>
+      <div style="font-size:12px;margin-top:4px;color:#999;">JPG, PNG supported</div>
+      <input type="file" id="imageInput" accept="image/*">
+    </div>
+    <div class="file-info" id="imageFileInfo"></div>
+
+    <div class="row">
+      <label>Target Size</label>
+      <input type="number" id="imageTargetKb" placeholder="e.g. 100" min="1">
+      <span class="unit">KB</span>
+    </div>
+
+    <button class="action" id="imageCompressBtn" disabled>Compress Karo</button>
+
+    <div class="progress-wrap" id="imageProgressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="imageProgressFill"></div></div>
+      <div class="progress-label" id="imageProgressLabel">Processing...</div>
+    </div>
+
+    <div class="result-box" id="imageResultBox">
+      <div class="result-row"><span>Original Size:</span><strong id="imageOrigSize">-</strong></div>
+      <div class="result-row"><span>Final Size:</span><strong id="imageFinalSize">-</strong></div>
+      <div class="result-row"><span>Target Size:</span><strong id="imageTargetSizeShown">-</strong></div>
+      <img class="preview-img" id="imagePreview">
+      <br>
+      <a class="download-btn" id="imageDownloadBtn" download>⬇️ Compressed Download Karo</a>
+      <a class="download-btn secondary" id="imageDownloadOrigBtn" download>⬇️ Original Download Karo</a>
+    </div>
+
+    <div class="note">
+      Note: Agar target size original se chhota hai to quality thodi kam ho sakti hai (JPEG compression). Agar target size bada hai to resolution/quality badhaayi jaati hai bina kuch lose kiye.
+    </div>
+  </div>
+
+  <!-- PDF PANEL -->
+  <div class="panel" id="panel-pdf">
+    <div class="drop-zone" id="pdfDrop">
+      <div>📁 PDF yaha drag karo ya click karke select karo</div>
+      <input type="file" id="pdfInput" accept="application/pdf">
+    </div>
+    <div class="file-info" id="pdfFileInfo"></div>
+
+    <div class="row">
+      <label>Target Size</label>
+      <input type="number" id="pdfTargetKb" placeholder="e.g. 200" min="1">
+      <span class="unit">KB</span>
+    </div>
+
+    <button class="action" id="pdfCompressBtn" disabled>Compress Karo</button>
+
+    <div class="progress-wrap" id="pdfProgressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="pdfProgressFill"></div></div>
+      <div class="progress-label" id="pdfProgressLabel">Processing...</div>
+    </div>
+
+    <div class="result-box" id="pdfResultBox">
+      <div class="result-row"><span>Original Size:</span><strong id="pdfOrigSize">-</strong></div>
+      <div class="result-row"><span>Final Size:</span><strong id="pdfFinalSize">-</strong></div>
+      <div class="result-row"><span>Target Size:</span><strong id="pdfTargetSizeShown">-</strong></div>
+      <a class="download-btn" id="pdfDownloadBtn" download>⬇️ Compressed Download Karo</a>
+      <a class="download-btn secondary" id="pdfDownloadOrigBtn" download>⬇️ Original Download Karo</a>
+    </div>
+
+    <div class="note">
+      Note: PDF compression har page ko high-quality image mein render karke wapas PDF banata hai (jaisa online compressor tools karte hain). Bahut badi target size (original se bahut zyada) achieve karne ki ek practical limit hai — jitna possible hoga utna best quality mein banaya jayega.
+    </div>
+  </div>
+
+  <!-- DOCUMENT CREATOR PANEL (Front + Back on one A4) -->
+  <div class="panel" id="panel-doc">
+    <div class="side-block">
+      <h3>🔵 Front Side</h3>
+      <div class="mini-drop" id="frontDrop">
+        📁 Front image select karo
+        <input type="file" id="frontInput" accept="image/*">
+      </div>
+      <div class="crop-wrap" id="frontCropWrap" style="display:none;">
+        <canvas id="frontDisplayCanvas"></canvas>
+        <canvas class="crop-overlay" id="frontOverlayCanvas"></canvas>
+      </div>
+      <div class="crop-controls" id="frontCropControls" style="display:none;">
+        <button id="frontCropStartBtn">✂️ Crop</button>
+        <button id="frontCropConfirmBtn" class="primary" style="display:none;">✅ Crop Confirm</button>
+        <button id="frontCropCancelBtn" style="display:none;">✖ Cancel</button>
+        <button id="frontResetBtn">↺ Reset (uncrop)</button>
+      </div>
+    </div>
+
+    <div class="side-block">
+      <h3>🟢 Back Side</h3>
+      <div class="mini-drop" id="backDrop">
+        📁 Back image select karo
+        <input type="file" id="backInput" accept="image/*">
+      </div>
+      <div class="crop-wrap" id="backCropWrap" style="display:none;">
+        <canvas id="backDisplayCanvas"></canvas>
+        <canvas class="crop-overlay" id="backOverlayCanvas"></canvas>
+      </div>
+      <div class="crop-controls" id="backCropControls" style="display:none;">
+        <button id="backCropStartBtn">✂️ Crop</button>
+        <button id="backCropConfirmBtn" class="primary" style="display:none;">✅ Crop Confirm</button>
+        <button id="backCropCancelBtn" style="display:none;">✖ Cancel</button>
+        <button id="backResetBtn">↺ Reset (uncrop)</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Target Size</label>
+      <input type="number" id="docTargetKb" placeholder="optional — khali chhodo best quality ke liye" min="1">
+      <span class="unit">KB</span>
+    </div>
+
+    <div class="format-row">
+      <button class="action" id="docDownloadJpegBtn" disabled>⬇️ JPEG</button>
+      <button class="action" id="docDownloadPngBtn" disabled>⬇️ PNG</button>
+      <button class="action" id="docDownloadPdfBtn" disabled>⬇️ PDF</button>
+    </div>
+
+    <div class="progress-wrap" id="docProgressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="docProgressFill"></div></div>
+      <div class="progress-label" id="docProgressLabel">Processing...</div>
+    </div>
+
+    <div class="result-box" id="docResultBox">
+      <div class="result-row"><span>Final Size:</span><strong id="docFinalSize">-</strong></div>
+      <img class="preview-img" id="docPreview">
+    </div>
+
+    <div class="note">
+      Dono images (Front + Back) ek blank A4 page par upar-neeche arrange ho jayengi, jaise ID document print hota hai. Target KB khali chhodo to best-quality (uncompressed) file milegi.
+    </div>
+  </div>
+
+  <!-- IMAGE → PDF PANEL -->
+  <div class="panel" id="panel-img2pdf">
+    <div class="drop-zone" id="i2pDrop">
+      <div>📁 Image select karo</div>
+      <input type="file" id="i2pInput" accept="image/*">
+    </div>
+    <div class="file-info" id="i2pFileInfo"></div>
+
+    <div class="row">
+      <label>Target Size</label>
+      <input type="number" id="i2pTargetKb" placeholder="optional — khali chhodo best quality ke liye" min="1">
+      <span class="unit">KB</span>
+    </div>
+
+    <button class="action" id="i2pConvertBtn" disabled>PDF Banao</button>
+
+    <div class="progress-wrap" id="i2pProgressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="i2pProgressFill"></div></div>
+      <div class="progress-label" id="i2pProgressLabel">Processing...</div>
+    </div>
+
+    <div class="result-box" id="i2pResultBox">
+      <div class="result-row"><span>Original Image Size:</span><strong id="i2pOrigSize">-</strong></div>
+      <div class="result-row"><span>Final PDF Size:</span><strong id="i2pFinalSize">-</strong></div>
+      <a class="download-btn" id="i2pDownloadBtn" download>⬇️ PDF Download Karo</a>
+    </div>
+  </div>
+
+  <!-- MERGE PDF PANEL -->
+  <div class="panel" id="panel-mergepdf">
+    <div class="drop-zone" id="mergeDrop">
+      <div>📁 Multiple PDFs select karo (ek saath ya ek-ek karke add karo)</div>
+      <input type="file" id="mergeInput" accept="application/pdf" multiple>
+    </div>
+    <div id="mergeFileList"></div>
+
+    <div class="row">
+      <label>Target Size</label>
+      <input type="number" id="mergeTargetKb" placeholder="optional — khali chhodo original quality ke liye" min="1">
+      <span class="unit">KB</span>
+    </div>
+
+    <button class="action" id="mergeBtn" disabled>PDFs Merge Karo</button>
+
+    <div class="progress-wrap" id="mergeProgressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="mergeProgressFill"></div></div>
+      <div class="progress-label" id="mergeProgressLabel">Processing...</div>
+    </div>
+
+    <div class="result-box" id="mergeResultBox">
+      <div class="result-row"><span>Total Pages:</span><strong id="mergePageCount">-</strong></div>
+      <div class="result-row"><span>Final Size:</span><strong id="mergeFinalSize">-</strong></div>
+      <a class="download-btn" id="mergeDownloadBtn" download>⬇️ Merged PDF Download Karo</a>
+    </div>
+
+    <div class="note">Files jis order mein list mein hain, usi order mein merge honge. Upar-neeche button se order badal sakte ho.</div>
+  </div>
+
+  <!-- IMAGE MERGER PANEL -->
+  <div class="panel" id="panel-imgmerge">
+    <div class="drop-zone" id="imgMergeDrop">
+      <div>📁 Multiple images select karo</div>
+      <input type="file" id="imgMergeInput" accept="image/*" multiple>
+    </div>
+    <div id="imgMergeFileList"></div>
+
+    <select class="tool-select" id="imgMergeLayout">
+      <option value="vertical">⬇️ Vertical Stack (upar-neeche)</option>
+      <option value="horizontal">➡️ Horizontal Stack (left-right)</option>
+    </select>
+
+    <div class="row">
+      <label>Target Size</label>
+      <input type="number" id="imgMergeTargetKb" placeholder="optional — khali chhodo best quality ke liye" min="1">
+      <span class="unit">KB</span>
+    </div>
+
+    <div class="format-row">
+      <button class="action" id="imgMergeJpegBtn" disabled>⬇️ JPEG</button>
+      <button class="action" id="imgMergePngBtn" disabled>⬇️ PNG</button>
+      <button class="action" id="imgMergePdfBtn" disabled>⬇️ PDF</button>
+    </div>
+
+    <div class="progress-wrap" id="imgMergeProgressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="imgMergeProgressFill"></div></div>
+      <div class="progress-label" id="imgMergeProgressLabel">Processing...</div>
+    </div>
+
+    <div class="result-box" id="imgMergeResultBox">
+      <div class="result-row"><span>Final Size:</span><strong id="imgMergeFinalSize">-</strong></div>
+      <img class="preview-img" id="imgMergePreview">
+    </div>
+  </div>
+</div>
+
+<script src="libs/pdf.min.js"></script>
+<script src="libs/pdf-lib.min.js"></script>
+<script src="compressor.js"></script>
+</body>
+</html>
